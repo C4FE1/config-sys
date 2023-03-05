@@ -9,9 +9,9 @@
 //altere nano para o editor de texto de sua preferencia 
 #define EDITOR "nano"
 
-#define PATH "/home/kohi/Sources/config-sys/modules/"
+#define PATH "/usr/bin/config-sys/modules/"
 
-#define SRC "/home/kohi/config-sys/src/"
+#define SRC "/usr/bin/config-sys/src/"
 
 using namespace std;
 
