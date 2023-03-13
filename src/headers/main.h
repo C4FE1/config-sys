@@ -9,11 +9,10 @@
 
 #define EDITOR "nano"
 
-#define PATH "/home/kohi/Sources/config-sys/configs/"
-#define MODULES "/home/kohi/Sources/config-sys/modules/"
-#define LINUX_SRC "/home/kohi/Sources/config-sys/src/Linux/"
-//#define SRC "/home/kohi/Sources/config-sys/src/"
-#define RIAMU "/home/kohi/Sources/riamu/"
+#define PATH "/usr/bin/config-sys/configs/"
+#define MODULES "/usr/bin/config-sys/modules/"
+#define LINUX_SRC "/usr/local/src/config-sys/src/Linux/"
+#define RIAMU "/usr/bin/riamu/"
 
 using namespace std;
 
