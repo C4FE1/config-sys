@@ -23,7 +23,7 @@ const char* modules = MODULES ;
 const char* editor = EDITOR ;
 const char* linux_src = LINUX_SRC ;
 const char* riamu = RIAMU ;
-
+/*
 //Desabilita serviços 0%
 void disable(char* &name){
     sprintf(cmd,"python %sdisabler.py %s", modules, name);
@@ -34,7 +34,7 @@ void disable(char* &name){
 void enable(char* &name){
 
 }
-
+*/
 //Remove das configurações // 100%
 void remove(char* &arg){
     int ret;
@@ -56,7 +56,7 @@ void help(){
     printf("--enable\tHabilita um serviço\n");
     printf("--disable\tDesabilita um serviço\n");
 }
-
+/*
 //descobre o programa a iniciar ou habilitar // 10%
 void set(char* &arg, char* &arg2){
     if(string(arg)=="fstab"){
@@ -75,7 +75,7 @@ void set(char* &arg, char* &arg2){
         printf("Argumento: %s invalido\n",arg);
     }
 }
-
+*/
 //descobre o programa a configurar // 100%
 void config(char* &arg){
     if(arg==NULL){
@@ -95,7 +95,7 @@ void config(char* &arg){
         //printf("%s\n",cmd);
     }
 }
-
+/*
 //descobre o programa a listar // 10%
 void list(char* &arg){
     if(string(arg)=="settings"){
@@ -116,7 +116,7 @@ void list(char* &arg){
         exit(0);
     }
 }
-
+*/
 //faz os links simbolicos // 100%
 void add(char* &arg, char* &name){
     //tenta executar o que está dentro
