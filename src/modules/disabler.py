@@ -2,16 +2,19 @@ import sys
 import os
 import psutil
 
-# nome do processo a ser finalizado
-process_name = sys.argv[1]
 
-# percorre todos os processos em execução
-for proc in psutil.process_iter():
-    try:
-        # verifica se o nome do processo corresponde ao nome procurado
-        if proc.name() == process_name:
-            # finaliza o processo
-            proc.terminate()
-            print(f"O processo {process_name} foi finalizado com sucesso!")
-    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-        pass
+# obtém o processo com PID 1
+process = psutil.Process(1)
+
+# exibe as informações do processo
+#print(f"PID: {process.pid}")
+#print(f"Nome: {process.name()}")
+#print(f"Status: {process.status()}")
+if process.name() == "systemd":
+    print("sistemad")
+    os.system("systemctl disable {}" .format(sys.argv[1]))
+elif process.name() == "runit" :
+    print("run it")
+    os.system("rm /var/service/{}" .format(sys.argv[1]))
+else:
+    print("init system não reconhecido")
