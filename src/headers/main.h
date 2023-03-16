@@ -6,13 +6,15 @@
 #include <ctype.h>
 #include <filesystem>
 #include <unistd.h>
+#include <locale.h>
 
 #define EDITOR "nano"
 
-#define PATH "/usr/bin/config-sys/configs/"
-#define MODULES "/usr/bin/config-sys/modules/"
-#define LINUX_SRC "/usr/local/src/config-sys/src/Linux/"
-#define RIAMU "/usr/bin/riamu/"
+#define PATH "/home/kohi/Sources/config-sys/configs/"
+#define MODULES "/home/kohi/Sources/config-sys/modules/"
+#define LINUX_SRC "/home/kohi/Sources/config-sys/src/Linux/"
+//#define SRC "/home/kohi/Sources/config-sys/src/"
+#define RIAMU "/home/kohi/Sources/riamu/"
 
 using namespace std;
 
@@ -23,18 +25,22 @@ const char* modules = MODULES ;
 const char* editor = EDITOR ;
 const char* linux_src = LINUX_SRC ;
 const char* riamu = RIAMU ;
+
 /*
-//Desabilita serviços 0%
+//Desabilita serviços 100%
 void disable(char* &name){
     sprintf(cmd,"python %sdisabler.py %s", modules, name);
     system(cmd);
+
 }
 
 //Habilita serviços 0%
 void enable(char* &name){
-
+    sprintf(cmd,"python %senabler.py %s", modules, name);
+    system(cmd);
 }
 */
+
 //Remove das configurações // 100%
 void remove(char* &arg){
     int ret;
@@ -56,15 +62,14 @@ void help(){
     printf("--enable\tHabilita um serviço\n");
     printf("--disable\tDesabilita um serviço\n");
 }
-/*
-//descobre o programa a iniciar ou habilitar // 10%
+
+//descobre o programa a iniciar ou habilitar // 50%
 void set(char* &arg, char* &arg2){
     if(string(arg)=="fstab"){
         sprintf(cmd,"%sgensfatb",modules);
         system(cmd);
     }else if(string(arg)=="kernel"){
-        //placeholder
-        //printf("kenele\n");
+        
     }else if(string(arg)=="locale"){
 
     }else if(string(arg)=="editor"){
@@ -75,7 +80,7 @@ void set(char* &arg, char* &arg2){
         printf("Argumento: %s invalido\n",arg);
     }
 }
-*/
+
 //descobre o programa a configurar // 100%
 void config(char* &arg){
     if(arg==NULL){
@@ -83,31 +88,34 @@ void config(char* &arg){
     }else if(arg=="kernel"){
         //sprintf(cmd,"%s make menuconfig",linux_src);
         system(cmd);
+        //set("kernel", \0);
     }else if(arg=="riamu"){
 
     }else{
         //sprintf(cmd," %s%s", path, arg);
         //execvp(editor,cmd);
-        sprintf(cmd, "%s %s%s",editor, path, arg);
+        sprintf(cmd, "%s %s%s",editor, path, arg);   //real
         //asprintf(cmd,"%s %s%s",editor, path, arg); //ideal
         //execvp(cmd);
         system(cmd);
         //printf("%s\n",cmd);
     }
 }
-/*
-//descobre o programa a listar // 10%
+
+//descobre o programa a listar // 75%
 void list(char* &arg){
     if(string(arg)=="settings"){
         sprintf(cmd,"ls %s",path);
         printf("As opções são:\n");
         system(cmd);
-    }else if(string(arg)=="services"){
+    }//else if(string(arg)=="services"){
         //system("systemctl list-units");
         //system("");
-        printf("serviço\n");
-    }else if(string(arg)=="locale"){
-        system("locale -a ");
+        //printf("serviço\n");
+    //}
+    else if(string(arg)=="locale"){
+        sprintf(cmd,"python %slister.py %s",modules,"locale");
+        system(cmd);
     }else if(string(arg)=="kernel"){
         sprintf(cmd,"python %slister.py %s", modules, linux_src);
         system(cmd);
@@ -116,7 +124,7 @@ void list(char* &arg){
         exit(0);
     }
 }
-*/
+
 //faz os links simbolicos // 100%
 void add(char* &arg, char* &name){
     //tenta executar o que está dentro
