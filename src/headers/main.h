@@ -81,15 +81,16 @@ void set(char* &arg, char* &arg2){
     }
 }
 
-//descobre o programa a configurar // 100%
+//descobre o programa a configurar // 33,33...%
 void config(char* &arg){
     if(arg==NULL){
         printf("Falta arguementos após --config\n");
-    }else if(arg=="kernel"){
+    }//else if(arg=="kernel"){
         //sprintf(cmd,"%s make menuconfig",linux_src);
-        system(cmd);
+        //system(cmd);
         //set("kernel", \0);
-    }else if(arg=="riamu"){
+    //}
+    else if(arg=="riamu"){
 
     }else{
         //sprintf(cmd," %s%s", path, arg);
@@ -102,17 +103,19 @@ void config(char* &arg){
     }
 }
 
-//descobre o programa a listar // 75%
+//descobre o programa a listar // 100%
 void list(char* &arg){
     if(string(arg)=="settings"){
         sprintf(cmd,"ls %s",path);
         printf("As opções são:\n");
         system(cmd);
-    }//else if(string(arg)=="services"){
+    }else if(string(arg)=="services"){
         //system("systemctl list-units");
         //system("");
         //printf("serviço\n");
-    //}
+        sprintf(cmd,"python %slister.py %s",modules,"services");
+        system(cmd);
+    }
     else if(string(arg)=="locale"){
         sprintf(cmd,"python %slister.py %s",modules,"locale");
         system(cmd);
