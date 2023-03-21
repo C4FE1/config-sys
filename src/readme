@@ -10,4 +10,5 @@ config-sys
 [x]Rescrever a função set parcialmente utilizando fopen para listar os locale
 [x]Fazer a função list detectar outras versões do kernel
 [ ]Limpar o codigo dos system() e usar outras ferramentas (possivelmente execvp();).
+[ ]Utilizar asprintf() no lugar de sprintf() para ter um vetor char que irá alocar memoria de acordo com a nessecidade do programa
 //se tiver em duvida analise o metodo de instalação do gentoo
