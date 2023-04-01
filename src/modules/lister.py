@@ -21,14 +21,6 @@ if sys.argv[1]=="locale":
     lista=generated_locales
     for indice, arquivo in enumerate(lista):
         print(f"{indice + 1} - {arquivo}\n")
-
-    '''
-    # obtem as chaves do dicionario de alias de localizacao
-    keys = locale.locale_alias.keys()
-
-    # concatena as chaves separadas por quebra de linha e imprime na tela
-    print('\n'.join(keys))
-    '''
 elif sys.argv[1]=="services":
     print("placeholder") 
     # Cria uma lista vazia para os serviços em execução e parados
@@ -62,12 +54,3 @@ else:
     lista=os.listdir(sys.argv[1])
     for indice, arquivo in enumerate(lista):
         print(f"{indice + 1} - {arquivo}\n")
-
-'''
-argumento = sys.argv[1]
-
-lista=os.listdir(sys.argv[1])
-
-for indice, arquivo in enumerate(lista):
-    print(f"{indice + 1} - {arquivo}")
-'''
