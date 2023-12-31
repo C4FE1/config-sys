@@ -1,0 +1,149 @@
+#!/bin/bash
+
+# preciso falar alguma coisa ?
+editor="nvim"
+# O caminho que seus arquivos de configuração estarão linkados
+config_path="$HOME/.config/config-sys/"
+# Altere esse valor sempre que for mover o config-sys
+script_path="$HOME/.local/usr/bin/config-sys"
+# Altere esse valor sempre que for mover a pasta de wallpapers
+wallpapers_path="$HOME/.wallpapers/"
+
+# se o numero de argumentos for equal a zero entao
+if [ $# -eq 0 ]; then
+  echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
+  exit 1
+fi
+
+if [ "$1" == "--add" ]; then
+  
+  if [ $# -eq 3 ]; then
+    ln -s "$2" "$config_path$3"
+    exit 0
+  else
+    echo "Erro: falta o caminho e um nome."
+    exit 1
+  fi
+
+elif [ "$1" == "--remove" ]; then
+  
+  if [ $# -eq 2 ]; then 
+    rm -rf $config_path"$2"
+    echo "Arquivo removido: ~/.config/configs/"$2""
+    exit 0
+  else
+    echo "Erro: falta de nome."
+    exit 1
+  fi
+
+elif [ $1 == "--config" ]; then
+  
+  if [ $# -eq 2 ]; then
+    $editor $config_path$2
+    exit 0
+  else 
+    echo "Erro: falta de nome."
+    exit 1
+  fi
+
+elif [ $1 == "--list" ]; then
+  
+  if [ $# -eq 2 ]; then
+    if [ $2 == "config" ]; then
+      ls -la $config_path
+      exit 0
+    elif [ $2 == "wallpapers" ]; then
+      ls -la $wallpapers_path
+      exit 0
+    else
+      echo "Segundo argumento desconhecido: $2"
+      exit 1
+    fi
+  
+  else
+    echo "Falta segundo argumento: listar o que ?"
+    exit 1
+  fi
+
+elif [ $1 == "--set" ]; then
+    if [ $# -eq 3 ]; then
+    
+    if [ $2 == "wallpaper" ]; then
+      # Listas de extensões possíveis
+      extensoes_img=("png" "PNG" "jpeg" "jpg"  )
+      extensoes_vid=("mp4" "mkv")
+      
+      # Tenta encontrar o arquivo com uma das extensões
+      #arquivo_img=""
+      for extensao_img in "${extensoes_img[@]}"; do
+        arquivo="$wallpapers_path$3.$extensao_img"
+        if [ -e "$arquivo" ]; then
+          arquivo_img="$arquivo"
+          break 
+        fi
+      done
+
+      #arquivo_vid=""
+      for extensao_vid in "${extensoes_vid[@]}"; do
+        arquivo="$wallpapers_path$3.$extensao_vid"
+        if [ -e "$arquivo" ]; then
+          arquivo_vid="$arquivo"
+          break 
+        fi
+      done
+      
+      if [ -n "$arquivo_img" ]; then
+        # meu deus
+        pkill mpvpaper
+
+        # ooh may gooh
+        pkill ffmpeg
+
+        # Exibe o nome do arquivo
+        echo "$arquivo_img"
+        
+        # Completa com a extensão do arquivo wal
+        wal -i "$arquivo_img"
+
+        # Executa o comando swww com a imagem do diretório especificado
+        swww img "$arquivo_img"
+        sleep 4
+      elif [ -n "$arquivo_vid" ]; then 
+        
+        # meu deus
+        #killall mpvpaper
+
+        # Exibe o nome do arquivo
+        echo "$arquivo_vid";
+        
+
+        wal -i "$arquivo_vid"
+        
+
+        pkill ffmpeg
+        
+        
+        sleep 3
+        pkill mpvpaper 
+        sleep 2
+        mpvpaper -fork -o "loop" HDMI-A-1 $arquivo_vid
+        sleep 2
+
+      else
+        echo $arquivo_vid
+        echo $arquivo_img
+        echo $wallpapers_path
+        echo "O arquivo $3 não foi encontrado."
+        exit 1
+      fi
+    fi
+ fi
+elif [ $# -eq 0 ]; then
+  
+  echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
+  exit 1
+else
+
+  echo "Erro: argumento desconhecido "$1"."
+  exit 1
+fi
