@@ -138,6 +138,16 @@ elif [ $1 == "--set" ]; then
       fi
     fi
  fi
+elif [ $1 == "--help" ]; then
+  echo "Uso: config-sys [opção] <condição | caminho> {objeto}"
+  echo "exemplo: config-sys --set wallpaper nome_do_wallpaper"
+  echo "opções:"
+  echo "--help   => mostra essa mensagem em seu terminal"
+  echo "--list   => lista os objetos de acordo com a condição:"
+  echo "  wallpapers"
+  echo "  configs"
+  echo "--add    => adciona um caminho como objeto a ser configurado"
+  echo "--remove => remove o objeto que estava sendo configurado"
 elif [ $# -eq 0 ]; then
   
   echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
