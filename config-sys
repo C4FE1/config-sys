@@ -149,7 +149,7 @@ elif [ $1 == "--help" ]; then
   echo "--add    => adciona um caminho como objeto a ser configurado"
   echo "--remove => remove o objeto que estava sendo configurado"
   echo "--set    => configura um objeto de acordo com a condição:"
-    echo "  wallpapers"
+  echo "  wallpapers"
 elif [ $# -eq 0 ]; then
   
   echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
