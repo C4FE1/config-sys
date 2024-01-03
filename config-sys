@@ -12,11 +12,11 @@ wallpapers_path="$HOME/.wallpapers/"
 # se o numero de argumentos for equal a zero entao
 if [ $# -eq 0 ]; then
   echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
-  help
+  help_page
   exit 1
 fi
 
-help(){
+help_page(){
   echo "Uso: config-sys [opção] <condição | caminho> {objeto}"
   echo "exemplo: config-sys --set wallpaper nome_do_wallpaper"
   echo "opções:"
@@ -154,16 +154,16 @@ elif [ $1 == "--set" ]; then
     fi
  fi
 elif [ $1 == "--help" ]; then
-  help
+  help_page
 exit 0
 elif [ $# -eq 0 ]; then
   
   echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
-  help
+  help_page
   exit 1
 else
 
   echo "Erro: argumento desconhecido "$1"."
-  help
+  help_page
   exit 1
 fi
