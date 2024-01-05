@@ -10,13 +10,11 @@ script_path="$HOME/.local/usr/bin/config-sys"
 wallpapers_path="$HOME/.wallpapers/"
 # Altere esse valor conforme o seu gerenciador de pacotes
 InstallPackages="sudo pacman -S"
+# voce já sabe
+RemovePackages="sudo pacman -Rns"
+# Altere esse valor sempre que for mover sua HOME
+generations_path="$HOME/.config/config-sys/Generations/"
 
-# se o numero de argumentos for equal a zero entao
-if [ $# -eq 0 ]; then
-  echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
-  help_page
-  exit 1
-fi
 
 help_page(){
   echo "Uso: config-sys [opção] <condição | caminho> {objeto}"
@@ -26,13 +24,24 @@ help_page(){
   echo "--list   => lista os objetos de acordo com a condição:"
   echo "  wallpapers"
   echo "  configs"
+  echo "  system-configs"
   echo "--add    => adciona um caminho como objeto a ser configurado"
   echo "--remove => remove o objeto que estava sendo configurado"
   echo "--set    => configura um objeto de acordo com a condição:"
   echo "  wallpapers"
-  echo "--load   => carrega o que for indicado pela condição:"
+  #echo "--load   => carrega o que for indicado pela condição:"
+  echo "  system-config"
+  echo "--unset  => desfaz a configuração de acordo com a condição:"
   echo "  system-config"
 }
+
+
+# se o numero de argumentos for equal a zero entao
+if [ $# -eq 0 ]; then
+  echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
+  help_page
+  exit 1
+fi
 
 if [ "$1" == "--add" ]; then
   
@@ -55,7 +64,7 @@ elif [ "$1" == "--remove" ]; then
     exit 1
   fi
 
-elif [ $1 == "--config" ]; then
+elif [ "$1" == "--config" ]; then
   
   if [ $# -eq 2 ]; then
     $editor $config_path$2
@@ -87,99 +96,127 @@ elif [ $1 == "--list" ]; then
 elif [ $1 == "--set" ]; then
     if [ $# -eq 3 ]; then
     
-    if [ $2 == "wallpaper" ]; then
-      # Listas de extensões possíveis
-      extensoes_img=("png" "PNG" "jpeg" "jpg"  )
-      extensoes_vid=("mp4" "mkv")
+      if [ $2 == "wallpaper" ]; then
+        # Listas de extensões possíveis
+        extensoes_img=("png" "PNG" "jpeg" "jpg"  )
+        extensoes_vid=("mp4" "mkv")
       
-      # Tenta encontrar o arquivo com uma das extensões
-      #arquivo_img=""
-      for extensao_img in "${extensoes_img[@]}"; do
-        arquivo="$wallpapers_path$3.$extensao_img"
-        if [ -e "$arquivo" ]; then
-          arquivo_img="$arquivo"
-          break 
-        fi
-      done
+        # Tenta encontrar o arquivo com uma das extensões
+        #arquivo_img=""
+        for extensao_img in "${extensoes_img[@]}"; do
+          arquivo="$wallpapers_path$3.$extensao_img"
+          if [ -e "$arquivo" ]; then
+            arquivo_img="$arquivo"
+            break 
+          fi
+        done
 
-      #arquivo_vid=""
-      for extensao_vid in "${extensoes_vid[@]}"; do
-        arquivo="$wallpapers_path$3.$extensao_vid"
-        if [ -e "$arquivo" ]; then
-          arquivo_vid="$arquivo"
-          break 
-        fi
-      done
+        #arquivo_vid=""
+        for extensao_vid in "${extensoes_vid[@]}"; do
+          arquivo="$wallpapers_path$3.$extensao_vid"
+          if [ -e "$arquivo" ]; then
+            arquivo_vid="$arquivo"
+            break 
+          fi
+        done
       
-      if [ -n "$arquivo_img" ]; then
-        # meu deus
-        pkill mpvpaper
+        if [ -n "$arquivo_img" ]; then
+          # meu deus
+          pkill mpvpaper
 
-        # ooh may gooh
+          # ooh may gooh
+          pkill ffmpeg
+
+          # Exibe o nome do arquivo
+          echo "$arquivo_img"
+        
+          # Completa com a extensão do arquivo wal
+          wal -i "$arquivo_img"
+
+          # Executa o comando swww com a imagem do diretório especificado
+          swww img "$arquivo_img"
+          sleep 4
+        elif [ -n "$arquivo_vid" ]; then 
+        
+          # meu deus
+          #killall mpvpaper
+
+          # Exibe o nome do arquivo
+          echo "$arquivo_vid";
+        
+
+          wal -i "$arquivo_vid"
+        
+
         pkill ffmpeg
-
-        # Exibe o nome do arquivo
-        echo "$arquivo_img"
-        
-        # Completa com a extensão do arquivo wal
-        wal -i "$arquivo_img"
-
-        # Executa o comando swww com a imagem do diretório especificado
-        swww img "$arquivo_img"
-        sleep 4
-      elif [ -n "$arquivo_vid" ]; then 
-        
-        # meu deus
-        #killall mpvpaper
-
-        # Exibe o nome do arquivo
-        echo "$arquivo_vid";
-        
-
-        wal -i "$arquivo_vid"
-        
-
-        pkill ffmpeg
         
         
-        sleep 3
-        pkill mpvpaper 
-        sleep 2
-        mpvpaper -fork -o "loop no-audio" HDMI-A-1 $arquivo_vid
-        sleep 2
-
-      else
-        echo $arquivo_vid
-        echo $arquivo_img
-        echo $wallpapers_path
-        echo "O arquivo $3 não foi encontrado."
-        exit 1
-      fi
-    elif [ "$2" == "system-config" ]; then
+          sleep 3
+          pkill mpvpaper 
+          sleep 2
+          mpvpaper -fork -o "loop no-audio" HDMI-A-1 $arquivo_vid
+          sleep 2
+        
+        fi
+      elif [ "$2" == "system-config" ]; then
       
-      if [ ! -f "$3" ]; then
-        echo "Erro: O arquivo $3 não existe."
-        exit 1
+        if [ ! -f "$3" ]; then
+          echo "Erro: O arquivo $3 não existe."
+          exit 1
+        fi
+
+        #cp "$3" $generations_path
+        
+        # Lista os arquivos na pasta Generations
+        files=($(ls -1 "$generations_path" | grep -E '^[0-9]+$'))
+
+        if [ ${#files[@]} -eq 0 ]; then
+          cp "$3" "$generations_path/1"
+          exit 1
+        fi
+
+        # Organiza essa porra
+        files_ordenados=($(echo "${files[@]}" | tr ' ' '\n' | sort -n))
+        
+        # obtem o maior numero
+        maior_numero=${files_ordenados[-1]}
+        
+        sucessor=$((maior_numero + 1))
+
+        cp $3 $generations_path$sucessor
+
+        # Lê as linhas do arquivo e salva em um vetor
+        mapfile -t SYSPackages < "$3"
+
+        # Exibe os elementos do vetor
+        echo "Conteúdo do vetor SYSPackages:"
+        for package in "${SYSPackages[@]}"; do
+          $InstallPackages $package
+        done
+      
       fi
+    fi
+elif [ "$1" == "--unset" ]; then
+  if [ $# -eq 3 ]; then
+    if [ "$2" == "system-config" ]; then
+      mapfile -t SYSPackages < "$generations_path$3"
 
-      # Lê as linhas do arquivo e salva em um vetor
-      mapfile -t SYSPackages < "$3"
-
-      # Exibe os elementos do vetor
-      echo "Conteúdo do vetor SYSPackages:"
+      echo "Removendo:"
       for package in "${SYSPackages[@]}"; do
-        "$InstallPackage $package"
+        $RemovePackages $package
       done
-
-   fi
-elif [ $1 == "--help" ]; then
+    fi
+  fi
+elif [ "$1" == "--help" ]; then
   help_page
 exit 0
+
 elif [ $# -eq 0 ]; then
   
   echo "Erro: Nenhum argumento fornecido. Pelo menos um argumento é necessário."
   help_page
   exit 1
+
 else
 
   echo "Erro: argumento desconhecido "$1"."
