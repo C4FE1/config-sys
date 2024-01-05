@@ -141,7 +141,7 @@ elif [ $1 == "--set" ]; then
         sleep 3
         pkill mpvpaper 
         sleep 2
-        mpvpaper -fork -o "loop" HDMI-A-1 $arquivo_vid
+        mpvpaper -fork -o "loop no-audio" HDMI-A-1 $arquivo_vid
         sleep 2
 
       else
