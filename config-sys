@@ -8,6 +8,8 @@ config_path="$HOME/.config/config-sys/"
 script_path="$HOME/.local/usr/bin/config-sys"
 # Altere esse valor sempre que for mover a pasta de wallpapers
 wallpapers_path="$HOME/.wallpapers/"
+# Altere esse valor conforme o seu gerenciador de pacotes
+InstallPackages="sudo pacman -S"
 
 # se o numero de argumentos for equal a zero entao
 if [ $# -eq 0 ]; then
@@ -28,6 +30,8 @@ help_page(){
   echo "--remove => remove o objeto que estava sendo configurado"
   echo "--set    => configura um objeto de acordo com a condição:"
   echo "  wallpapers"
+  echo "--load   => carrega o que for indicado pela condição:"
+  echo "  system-config"
 }
 
 if [ "$1" == "--add" ]; then
@@ -151,8 +155,23 @@ elif [ $1 == "--set" ]; then
         echo "O arquivo $3 não foi encontrado."
         exit 1
       fi
-    fi
- fi
+    elif [ "$2" == "system-config" ]; then
+      
+      if [ ! -f "$3" ]; then
+        echo "Erro: O arquivo $3 não existe."
+        exit 1
+      fi
+
+      # Lê as linhas do arquivo e salva em um vetor
+      mapfile -t SYSPackages < "$3"
+
+      # Exibe os elementos do vetor
+      echo "Conteúdo do vetor SYSPackages:"
+      for package in "${SYSPackages[@]}"; do
+        "$InstallPackage $package"
+      done
+
+   fi
 elif [ $1 == "--help" ]; then
   help_page
 exit 0
